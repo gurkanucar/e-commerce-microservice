@@ -20,7 +20,7 @@ services:
     environment:
       - ME_CONFIG_MONGODB_SERVER=mongodb
     ports:
-      - '8081:8081'
+      - '8091:8091'
     restart: always
     volumes:
       - ./docker-data/mongo:/data/db
@@ -29,6 +29,7 @@ services:
     image: mysql:8
     environment:
       MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: order_db
       MYSQL_PASSWORD: 1234
     ports:
       - 3307:3306
