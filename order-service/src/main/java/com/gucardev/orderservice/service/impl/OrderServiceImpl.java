@@ -6,6 +6,7 @@ import com.gucardev.orderservice.model.Order;
 import com.gucardev.orderservice.model.OrderItem;
 import com.gucardev.orderservice.repository.OrderRepository;
 import com.gucardev.orderservice.service.OrderService;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
+  @Transactional
   public Order placeOrder(CreateOrderRequest orderRequest) {
 
     var order =
@@ -31,6 +33,16 @@ public class OrderServiceImpl implements OrderService {
             .build();
 
     return orderRepository.save(order);
+  }
+
+  @Override
+  public Order getOrderById(Long id) {
+    return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("order not found!"));
+  }
+
+  @Override
+  public List<Order> getOrders() {
+    return orderRepository.findAll();
   }
 
   private List<OrderItem> extractOrderItemsFromDto(List<CreateOrderRequestItems> orderItems) {
