@@ -1,4 +1,4 @@
-package com.gucardev.productservice.exception;
+package com.gucardev.common.exception;
 
 import jakarta.validation.ConstraintViolationException;
 import java.util.HashMap;
