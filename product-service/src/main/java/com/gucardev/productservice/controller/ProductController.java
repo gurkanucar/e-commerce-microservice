@@ -1,12 +1,13 @@
 package com.gucardev.productservice.controller;
 
+import com.gucardev.common.response.ApiResponse;
 import com.gucardev.productservice.dto.request.CreateProductRequest;
 import com.gucardev.productservice.dto.response.ProductResponse;
 import com.gucardev.productservice.service.ProductService;
 import jakarta.validation.Valid;
-import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,20 +29,28 @@ public class ProductController {
   }
 
   @GetMapping
-  public List<ProductResponse> getProducts() {
-    return productService.getProducts().stream()
-        .map(product -> mapper.map(product, ProductResponse.class))
-        .toList();
+  public ResponseEntity<ApiResponse<Object>> getProducts() {
+    return ApiResponse.builder()
+        .data(
+            productService.getProducts().stream()
+                .map(product -> mapper.map(product, ProductResponse.class))
+                .toList())
+        .build();
   }
 
   @GetMapping("/{id}")
-  public ProductResponse getProductById(@PathVariable String id) {
-    return mapper.map(productService.getProductById(id), ProductResponse.class);
+  public ResponseEntity<ApiResponse<Object>> getProductById(@PathVariable String id) {
+    return ApiResponse.builder()
+        .data(mapper.map(productService.getProductById(id), ProductResponse.class))
+        .build();
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public ProductResponse createProduct(@Valid @RequestBody CreateProductRequest product) {
-    return mapper.map(productService.createProduct(product), ProductResponse.class);
+  public ResponseEntity<ApiResponse<Object>> createProduct(
+      @Valid @RequestBody CreateProductRequest product) {
+    return ApiResponse.builder()
+        .data(mapper.map(productService.createProduct(product), ProductResponse.class))
+        .build();
   }
 }
